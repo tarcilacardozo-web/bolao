@@ -268,14 +268,17 @@
             });
 
             // 2. Renderizar Espelho
-            const eContainer = document.getElementById('palpites-hoje-container');
-            dadosEspelho.forEach(ap => {
-                let linhas = "";
-                if(ap.P1 && ap.P1 !== "--") linhas += `<div class="palpite-linha">⚽ ${ap.P1}</div>`;
-                if(ap.P2 && ap.P2 !== "--") linhas += `<div class="palpite-linha">⚽ ${ap.P2}</div>`;
-                eContainer.innerHTML += `<div class="card-apostador"><h4><span>👤 ${ap.Apostador}</span> <span class="total-card">${ap.Status}</span></h4>${linhas}</div>`;
-            });
-
+                  const eContainer = document.getElementById('palpites-hoje-container');
+        dadosEspelho.forEach(ap => {
+            let linhas = "";
+            Object.keys(ap)
+                .filter(key => key.startsWith('P') && ap[key] && ap[key] !== '--')
+                .forEach(key => {
+                    linhas += `<div class="palpite-linha">⚽ ${ap[key]}</div>`;
+                });
+            eContainer.innerHTML += `<div class="card-apostador"><h4><span>👤 ${ap.Apostador}</span></h4>${linhas}</div>`;
+        });
+               
             // 3. Renderizar os 12 Jogos Fixos do Grupo
             const gContainer = document.getElementById('grupo-jogos-container');
             jogosGrupo.forEach(j => {
