@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bolão ASJUR 2026</title>
+    <style>
+        :root {
+            --primary: #10603a;
+            --secondary: #ecc213;
+            --dark: #1d1d1d;
+            --light: #f4f6f8;
+            --white: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--light); color: var(--dark); padding-bottom: 30px; font-size: 14px; }
+        
+        header { background: linear-gradient(135deg, var(--primary), #0b4026); color: var(--white); text-align: center; padding: 20px 15px; border-bottom: 6px solid var(--secondary); }
+        header h1 { font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        header p { font-size: 0.9rem; opacity: 0.9; }
+        
+        .nav-tabs { display: flex; flex-wrap: wrap; background: var(--dark); border-bottom: 2px solid var(--primary); }
+        .tab-btn { background: none; border: none; color: var(--white); padding: 12px 5px; font-size: 0.85rem; cursor: pointer; transition: 0.3s; font-weight: bold; flex: 1 1 33.33%; text-align: center; border-bottom: 2px solid transparent; }
+        .tab-btn.active { background: var(--primary); color: var(--secondary); border-bottom: 2px solid var(--secondary); }
+        
+        .container { max-width: 100%; margin: 15px auto; padding: 0 10px; }
+        .section { display: none; background: var(--white); padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section.active { display: block; }
+        
+        h2 { margin-bottom: 15px; color: var(--primary); border-left: 4px solid var(--secondary); padding-left: 8px; font-size: 1.2rem; }
+        h3 { margin: 20px 0 10px 0; color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 4px; }
+
+        .table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 6px; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 400px; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--primary); color: var(--white); font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .pos { font-weight: bold; text-align: center; width: 45px; }
+        .pts { font-weight: bold; text-align: center; }
+
+        .sub-tabs { display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .sub-btn { background: #e0e0e0; border: none; padding: 8px 12px; font-size: 0.8rem; font-weight: bold; cursor: pointer; border-radius: 4px; white-space: nowrap; }
+        .sub-btn.active { background: var(--primary); color: white; }
+
+        .fase-container { display: none; }
+        .fase-container.active { display: block; }
+
+        .match-card { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .team-display { font-weight: 600; width: 38%; font-size: 0.85rem; }
+        .team-display.home { text-align: right; }
+        .team-display.away { text-align: left; }
+        
+        .team-editable { width: 38%; display: flex; flex-direction: column; gap: 4px; }
+        .team-editable input[type="text"] { width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
+        
+        .match-card input[type="number"] { width: 38px; padding: 6px; text-align: center; font-size: 0.95rem; font-weight: bold; border: 1px solid #ccc; border-radius: 4px; }
+        
+        select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; background-color: white; height: 42px; }
+        .btn-submit { background: var(--primary); color: var(--white); border: none; padding: 14px; width: 100%; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 15px; display: block; }
+
+        .grid-palpites { display: flex; flex-direction: column; gap: 12px; }
+        .card-apostador { border: 1px solid #ddd; border-radius: 6px; padding: 15px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .card-apostador h4 { font-size: 1.05rem; margin-bottom: 10px; color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .card-apostador h4 .total-card { background: var(--primary); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+        .palpite-linha { font-size: 0.9rem; margin-bottom: 6px; color: #333; border-bottom: 1px dashed #f5f5f5; padding-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏆 Bolão ASJUR 2026 ⚽</h1>
+        <p>Acompanhamento Prático de Palpites</p>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'ranking')">📊 Classificação</button>
+        <button class="tab-btn" onclick="switchTab(this, 'hoje')">🔥 Espelho</button>
+        <button class="tab-btn" onclick="switchTab(this, 'apostar')">✍ shrink Palpitar</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- ABA 1: RANKING (PÓS-RODADA 13 REAL) -->
+        <section id="ranking" class="section active">
+            <h2>Classificação Geral - Rodada 13</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="pos">Pos.</th>
+                            <th>Apostador</th>
+                            <th class="pts">Acumulado</th>
+                            <th class="pts">Rodada 13</th>
+                            <th class="pts">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ABA 2: ESPELHO -->
+        <section id="hoje" class="section">
+            <h2>Espelho de Palpites</h2>
+            <div class="grid-palpites" id="palpites-hoje-container"></div>
+        </section>
+
+        <!-- ABA 3: DAR PALPITE -->
+        <section id="apostar" class="section">
+            <h2>Dar Palpite Dinâmico</h2>
+            
+            <form id="form-palpite" onsubmit="enviarWhatsApp(event)">
+                <label for="apostador" style="font-weight: bold; display: block; margin-bottom: 5px;">Quem é você?</label>
+                <select id="apostador" required>
+                    <option value="">Selecione seu nome...</option>
+                </select>
+
+                <!-- Sub-abas das fases de votação -->
+                <div class="sub-tabs">
+                    <button type="button" class="sub-btn active" onclick="switchFase('grupo')">Fase de Grupos (12j)</button>
+                    <button type="button" class="sub-btn" onclick="switchFase('16avos')">16avos</button>
+                    <button type="button" class="sub-btn" onclick="switchFase('oitavas')">Oitavas</button>
+                    <button type="button" class="sub-btn" onclick="switchFase('quartas')">Quartas</button>
+                    <button type="button" class="sub-btn" onclick="switchFase('semi')">Semifinais</button>
+                    <button type="button" class="sub-btn" onclick="switchFase('final')">Final</button>
+                </div>
+
+                <!-- FASE DE GRUPOS (12 JOGOS FIXOS) -->
+                <div id="fase-grupo" class="fase-container active">
+                    <h3>Últimos 12 Jogos da Fase de Grupos</h3>
+                    <div id="grupo-jogos-container"></div>
+                </div>
+
+                <!-- 16AVOS DE FINAL (DINÂMICO) -->
+                <div id="fase-16avos" class="fase-container">
+                    <h3>Palpites - 16avos de Final</h3>
+                    <p style="color: gray; font-size: 0.8rem; margin-bottom: 10px;">Digite os times e os placares desejados:</p>
+                    <div id="container-16avos"></div>
+                </div>
+
+                <!-- OITAVAS DE FINAL (DINÂMICO) -->
+                <div id="fase-oitavas" class="fase-container">
+                    <h3>Palpites - Oitavas de Final</h3>
+                    <div id="container-oitavas"></div>
+                </div>
+
+                <!-- QUARTAS DE FINAL (DINÂMICO) -->
+                <div id="fase-quartas" class="fase-container">
+                    <h3>Palpites - Quartas de Final</h3>
+                    <div id="container-quartas"></div>
+                </div>
+
+                <!-- SEMIFINAIS (DINÂMICO) -->
+                <div id="fase-semi" class="fase-container">
+                    <h3>Palpites - Semifinais</h3>
+                    <div id="container-semi"></div>
+                </div>
+
+                <!-- FINAL (DINÂMICO) -->
+                <div id="fase-final" class="fase-container">
+                    <h3>Palpites - Grande Final</h3>
+                    <div id="container-final"></div>
+                </div>
+
+                <button type="submit" class="btn-submit">📱 Gerar Texto e Enviar via WhatsApp</button>
+            </form>
+        </section>
+
+    </div>
+
+    <script>
+        const NUMERO_WHATSAPP = "5521995044809"; // TODO: Substitua pelo seu número real com DDD
+
+        // DADOS REAIS DO RANKING ATUALIZADO DA RODADA 13
+        const dadosRanking = [
+            { Pos: "1º", Apostador: "Rafael", Ant: "142", Ganho: "17", Total: "159" },
+            { Pos: "2º", Apostador: "Michelle", Ant: "132", Ganho: "19", Total: "151" },
+            { Pos: "3º", Apostador: "Carlão", Ant: "132", Ganho: "16", Total: "148" },
+            { Pos: "4º", Apostador: "Leandro", Ant: "111", Ganho: "32", Total: "143" },
+            { Pos: "5º", Apostador: "Ricardo Kappel", Ant: "127", Ganho: "15", Total: "142" },
+            { Pos: "6º", Apostador: "Frademir", Ant: "123", Ganho: "17", Total: "140" },
+            { Pos: "7º", Apostador: "Edson", Ant: "123", Ganho: "16", Total: "139" },
+            { Pos: "8º", Apostador: "Renata", Ant: "123", Ganho: "10", Total: "133" },
+            { Pos: "9º", Apostador: "Marcia Paz", Ant: "102", Ganho: "18", Total: "120" },
+            { Pos: "10º", Apostador: "Vini", Ant: "107", Ganho: "9", Total: "116" },
+            { Pos: "11º", Apostador: "Tarcila", Ant: "96", Ganho: "17", Total: "113" },
+            { Pos: "12º", Apostador: "Luis Gustavo", Ant: "94", Ganho: "18", Total: "112" },
+            { Pos: "13º", Apostador: "Laura", Ant: "108", Ganho: "4", Total: "112" },
+            { Pos: "14º", Apostador: "Loren", Ant: "84", Ganho: "9", Total: "93" },
+            { Pos: "15º", Apostador: "Priscila", Ant: "85", Ganho: "3", Total: "88" }
+        ];
+
+        // ESPELHO PARA EXIBIÇÃO DE PALPITES (Atualize o texto das linhas livremente)
+        const dadosEspelho = [
+            { Apostador: "Rafael", Status: "Palpitou", P1: "Uruguai 2 x 1 Espanha", P2: "Noruega 1 x 1 França" },
+            { Apostador: "Michelle", Status: "Aguardando", P1: "--", P2: "--" }
+        ];
+
+        // OS 12 JOGOS RESTANTES DA FASE DE GRUPOS
+        const jogosGrupo = [
+            { id: "g1", home: "Egito", away: "Irã", label: "Grupo G" },
+            { id: "g2", home: "Nova Zelândia", away: "Bélgica", label: "Grupo G" },
+            { id: "g3", home: "Uruguai", away: "Espanha", label: "Grupo H" },
+            { id: "g4", home: "Cabo Verde", away: "Arábia Saudita", label: "Grupo H" },
+            { id: "g5", home: "Noruega", away: "França", label: "Grupo I" },
+            { id: "g6", home: "Senegal", away: "Iraque", label: "Grupo I" },
+            { id: "g7", home: "Argentina", away: "Jordânia", label: "Grupo J" },
+            { id: "g8", home: "Argélia", away: "Áustria", label: "Grupo J" },
+            { id: "g9", home: "Colômbia", away: "Portugal", label: "Grupo K" },
+            { id: "g10", home: "RD Congo", away: "Uzbequistão", label: "Grupo K" },
+            { id: "g11", home: "Inglaterra", away: "Gana", label: "Grupo L" },
+            { id: "g12", home: "Croácia", away: "Panamá", label: "Grupo L" }
+        ];
+
+        function switchTab(btn, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function switchFase(faseId) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.fase-container').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('fase-' + faseId).classList.add('active');
+        }
+
+        function criarCamposDinamicos(containerId, prefixo, quantidade) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            for (let i = 1; i <= quantidade; i++) {
+                container.innerHTML += `
+                    <div class="match-card">
+                        <div class="team-editable">
+                            <input type="text" id="${prefixo}_h_name_${i}" placeholder="Time Casa ${i}">
+                        </div>
+                        <input type="number" min="0" id="${prefixo}_h_score_${i}">
+                        <span>X</span>
+                        <input type="number" min="0" id="${prefixo}_a_score_${i}">
+                        <div class="team-editable">
+                            <input type="text" id="${prefixo}_a_name_${i}" placeholder="Time Fora ${i}">
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function inicializarSite() {
+            // 1. Renderizar Ranking e Popular Select
+            const rBody = document.getElementById('ranking-body');
+            const select = document.getElementById('apostador');
+            dadosRanking.forEach(p => {
+                rBody.innerHTML += `<tr><td class="pos">${p.Pos}</td><td>${p.Apostador}</td><td class="pts">${p.Ant}</td><td class="pts" style="color:green;">+${p.Ganho}</td><td class="pts"><strong>${p.Total}</strong></td></tr>`;
+                select.innerHTML += `<option value="${p.Apostador}">${p.Apostador}</option>`;
+            });
+
+            // 2. Renderizar Espelho
+            const eContainer = document.getElementById('palpites-hoje-container');
+            dadosEspelho.forEach(ap => {
+                let linhas = "";
+                if(ap.P1 && ap.P1 !== "--") linhas += `<div class="palpite-linha">⚽ ${ap.P1}</div>`;
+                if(ap.P2 && ap.P2 !== "--") linhas += `<div class="palpite-linha">⚽ ${ap.P2}</div>`;
+                eContainer.innerHTML += `<div class="card-apostador"><h4><span>👤 ${ap.Apostador}</span> <span class="total-card">${ap.Status}</span></h4>${linhas}</div>`;
+            });
+
+            // 3. Renderizar os 12 Jogos Fixos do Grupo
+            const gContainer = document.getElementById('grupo-jogos-container');
+            jogosGrupo.forEach(j => {
+                gContainer.innerHTML += `
+                    <div class="match-card">
+                        <div class="team-display home">${j.home} <br><small style="color:gray; font-weight:normal;">${j.label}</small></div>
+                        <input type="number" min="0" id="${j.id}_home">
+                        <span>X</span>
+                        <input type="number" min="0" id="${j.id}_away">
+                        <div class="team-display away">${j.away}</div>
+                    </div>`;
+            });
+
+            // 4. Montar os blocos de mata-mata com caixas de texto editáveis para os times
+            criarCamposDinamicos('container-16avos', '16a', 16);
+            criarCamposDinamicos('container-oitavas', 'oit', 8);
+            criarCamposDinamicos('container-quartas', 'qua', 4);
+            criarCamposDinamicos('container-semi', 'sem', 2);
+            criarCamposDinamicos('container-final', 'fin', 1);
+        }
+
+        function enviarWhatsApp(e) {
+            e.preventDefault();
+            const nome = document.getElementById('apostador').value;
+            let msg = `*PALPITES DO BOLÃO ASJUR*%0A*Apostador:* ${nome}%0A%0A`;
+
+            // Capturar Fase de Grupos
+            let temGrupo = false;
+            let txtGrupo = `*FASE DE GRUPOS*%0A`;
+            jogosGrupo.forEach(j => {
+                const h = document.getElementById(`${j.id}_home`).value;
+                const a = document.getElementById(`${j.id}_away`).value;
+                if(h !== "" && a !== "") {
+                    txtGrupo += `⚽ ${j.home} ${h} x ${a} ${j.away}%0A`;
+                    temGrupo = true;
+                }
+            });
+            if(temGrupo) msg += txtGrupo + `%0A`;
+
+            // Função auxiliar para processar blocos dinâmicos do mata-mata
+            function processarMataMata(prefixo, titulo, qtd) {
+                let temFase = false;
+                let txtFase = `*${titulo}*%0A`;
+                for(let i=1; i<=qtd; i++) {
+                    const tH = document.getElementById(`${prefixo}_h_name_${i}`).value;
+                    const tA = document.getElementById(`${prefixo}_a_name_${i}`).value;
+                    const sH = document.getElementById(`${prefixo}_h_score_${i}`).value;
+                    const sA = document.getElementById(`${prefixo}_a_score_${i}`).value;
+                    if(tH && tA && sH !== "" && sA !== "") {
+                        txtFase += `⚽ ${tH} ${sH} x ${sA} ${tA}%0A`;
+                        temFase = true;
+                    }
+                }
+                return temFase ? txtFase + `%0A` : "";
+            }
+
+            msg += processarMataMata('16a', '16AVOS DE FINAL', 16);
+            msg += processarMataMata('oit', 'OITAVAS DE FINAL', 8);
+            msg += processarMataMata('qua', 'QUARTAS DE FINAL', 4);
+            msg += processarMataMata('sem', 'SEMIFINAIS', 2);
+            msg += processarMataMata('fin', 'GRANDE FINAL', 1);
+
+            window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${msg}`, '_blank');
+        }
+
+        window.onload = inicializarSite;
+    </script>
+</body>
+</html>
