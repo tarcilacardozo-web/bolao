@@ -65,7 +65,7 @@
 
 <div class="container">
     <section id="ranking" class="tab-content active">
-        <h2>Classificação Atualizada - Início Mata-Mata</h2>
+        <h2>Classificação Atualizada - Pós-Rodada</h2>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -119,24 +119,26 @@
 </div>
 
 <script>
+    // 1. DADOS DA CLASSIFICAÇÃO ATUALIZADOS CONFORME A PLANILHA RECENTE
     const dadosRanking = [
-        { Pos: "1º", Apostador: "Rafael", Grupos: 198, MataMata: 0 },
-        { Pos: "2º", Apostador: "Leandro", Grupos: 192, MataMata: 0 },
-        { Pos: "3º", Apostador: "Michelle", Grupos: 191, MataMata: 0 },
-        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 0 },
-        { Pos: "5º", Apostador: "Frademir", Grupos: 178, MataMata: 0 },
-        { Pos: "6º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 0 },
-        { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 0 },
-        { Pos: "8º", Apostador: "Edson", Grupos: 163, MataMata: 0 },
-        { Pos: "9º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 0 },
-        { Pos: "10º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 0 },
-        { Pos: "11º", Apostador: "Vini", Grupos: 141, MataMata: 0 },
-        { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 0 },
-        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 0 },
-        { Pos: "14º", Apostador: "Loren", Grupos: 117, MataMata: 0 },
-        { Pos: "15º", Apostador: "Priscila", Grupos: 115, MataMata: 0 }
+        { Pos: "1º", Apostador: "Rafael", Grupos: 198, MataMata: 31 },
+        { Pos: "2º", Apostador: "Leandro", Grupos: 192, MataMata: 32 },
+        { Pos: "3º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 47 },
+        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 32 },
+        { Pos: "5º", Apostador: "Frademir", Grupos: 178, MataMata: 33 },
+        { Pos: "6º", Apostador: "Michelle", Grupos: 191, MataMata: 20 },
+        { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 41 },
+        { Pos: "8º", Apostador: "Edson", Grupos: 163, MataMata: 36 },
+        { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 42 },
+        { Pos: "10º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 17 },
+        { Pos: "11º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 26 },
+        { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 26 },
+        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 16 },
+        { Pos: "14º", Apostador: "Priscila", Grupos: 115, MataMata: 23 },
+        { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 14 }
     ];
 
+    // Jogos fixos que aparecem na tabela do espelho (16avos mantido por enquanto)
     const titulosJogos = [
         "Alemanha x Paraguai", "França x Suécia", "África do Sul x Canadá", "Holanda x Marrocos",
         "Portugal x Croácia", "Espanha x Áustria", "EUA x Bósnia", "Bélgica x Senegal",
@@ -144,30 +146,40 @@
         "Argentina x Cabo Verde", "Austrália x Egito", "Suíça x Argélia", "Colômbia x Gana"
     ];
 
+    // CHAVEAMENTO ATUALIZADO DAS OITAVAS (Conforme imagem enviada)
     const configuracaoFases = {
         "16avos": titulosJogos,
-        "oitavas": ["Jogo 1", "Jogo 2", "Jogo 3", "Jogo 4", "Jogo 5", "Jogo 6", "Jogo 7", "Jogo 8"],
+        "oitavas": [
+            "Brasil x Noruega",
+            "México x (Inglaterra ou RD Congo)",
+            "(Argentina ou Cabo Verde) x (Austrália ou Egito)",
+            "(Suíça ou Argélia) x (Colômbia ou Gana)",
+            "Paraguai x França",
+            "Canadá x Marrocos",
+            "(Portugal ou Croácia) x (Espanha ou Áustria)",
+            "(Estados Unidos ou Bósnia) x (Bélgica ou Senegal)"
+        ],
         "quartas": ["Quartas 1", "Quartas 2", "Quartas 3", "Quartas 4"],
         "semi": ["Semifinal 1", "Semifinal 2"],
         "final": ["Grande Final"]
     };
 
     const dadosEspelho = [
-        { Apostador: "Carlão", J1: "2x0", J2: "3x1", J3: "1x2", J4: "2x1", J5: "2x1", J6: "2x0", J7: "2x1", J8: "2x1", J9: "2x1", J10: "1x2", J11: "2x2", J12: "3x0", J13: "3x0", J14: "1x2", J15: "2x1", J16: "2x1" },
+        { Apostador: "Carlão", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
         { Apostador: "Edson", J1: "4 x 1", J2: "3 x 0", J3: "1 x 2", J4: "1 x 2", J5: "1 x 0", J6: "3 x 0", J7: "2 x 0", J8: "3 x 1", J9: "2 x 0", J10: "1 x 3", J11: "2 x 0", J12: "4 x 0", J13: "5 x 0", J14: "0 x 2", J15: "3 x 1", J16: "4 x 1" },
-        { Apostador: "Frademir", J1: "1x0", J2: "2x0", J3: "0x1", J4: "1x1", J5: "1x1", J6: "2x0", J7: "2x0", J8: "1x0", J9: "1x0", J10: "1x1", J11: "1x1", J12: "2x0", J13: "2x0", J14: "1x1", J15: "1x0", J16: "1x0" },
-        { Apostador: "Laura", J1: "4x1", J2: "3x1", J3: "2x1", J4: "2x0", J5: "3x1", J6: "2x1", J7: "3x0", J8: "1x1", J9: "2x2", J10: "0x0", J11: "1x1", J12: "2x1", J13: "2x1", J14: "1x2", J15: "1x0", J16: "1x2" },
-        { Apostador: "Leandro", J1: "3 x 0", J2: "3 x 1", J3: "1 x 2", J4: "2x1", J5: "2 x 1", J6: "3 x 0", J7: "2 x 0", J8: "2 x 2", J9: "2 x 1", J10: "1 x 2", J11: "1 x 1", J12: "3 x 1", J13: "3 x 0", J14: "1 x 2", J15: "2 x 0", J16: "3 x 1" },
-        { Apostador: "Loren", J1: "4x1", J2: "3x1", J3: "--", J4: "3x0", J5: "3x2", J6: "4x1", J7: "2x0", J8: "2x1", J9: "3x2", J10: "1x1", J11: "2x2", J12: "3x1", J13: "4x1", J14: "1x2", J15: "2x1", J16: "2x2" },
-        { Apostador: "Renata", J1: "2x1", J2: "4x1", J3: "1x2", J4: "2x1", J5: "2x1", J6: "2x1", J7: "3x0", J8: "0x1", J9: "2x1", J10: "1x2", J11: "2x0", J12: "3x0", J13: "2x1", J14: "2x0", J15: "2x1", J16: "2x1" },
-        { Apostador: "Luis Gustavo", J1: "4x1", J2: "3x0", J3: "1x2", J4: "2x2", J5: "2x2", J6: "3x1", J7: "3x0", J8: "2x1", J9: "3x2", J10: "1x0", J11: "2x2", J12: "3x1", J13: "4x1", J14: "2x3", J15: "2x0", J16: "2x2" },
-        { Apostador: "Marcia Paz", J1: "3x1", J2: "3x2", J3: "1x1", J4: "2x1", J5: "3x2", J6: "2x1", J7: "1x1", J8: "2x0", J9: "3x2", J10: "2x0", J11: "2x1", J12: "1x0", J13: "2x1", J14: "2x1", J15: "2x0", J16: "2x1" },
-        { Apostador: "Michelle", J1: "2x1", J2: "3x1", J3: "1x2", J4: "2x0", J5: "1x1", J6: "2x0", J7: "2x1", J8: "1x1", J9: "2x0", J10: "1x1", J11: "2x1", J12: "3x0", J13: "4x0", J14: "2x1", J15: "2x1", J16: "3x0q" },
-        { Apostador: "Priscila", J1: "3x0", J2: "2x1", J3: "0x1", J4: "1x0", J5: "2x1", J6: "0x2", J7: "1x0", J8: "0x1", J9: "1x2", J10: "0x1", J11: "3x1", J12: "1x0", J13: "2x0", J14: "1x0", J15: "0x1", J16: "1x2" },
-        { Apostador: "Rafael", J1: "3x1", J2: "3x1", J3: "1x2", J4: "2x1", J5: "2x1", J6: "2x1", J7: "2x1", J8: "2x1", J9: "2x0", J10: "1x2", J11: "2x1", J12: "2x0", J13: "2x0", J14: "1x2", J15: "2x1", J16: "2x0" },
-        { Apostador: "Ricardo Kappel", J1: "2 x 0", J2: "3x1", J3: "1 x 2", J4: "2 x 0", J5: "1x1", J6: "2x0", J7: "3x1", J8: "2x1", J9: "2 x 1", J10: "1x2", J11: "2x0", J12: "2x1", J13: "2x0", J14: "1x2", J15: "2x1", J16: "2x1" },
-        { Apostador: "Tarcila", J1: "3x1", J2: "3x0", J3: "1x3", J4: "2x2", J5: "2x1", J6: "3x0", J7: "3x1", J8: "2x2", J9: "3x1", J10: "1x1", J11: "2x2", J12: "3x0", J13: "1x1", J14: "1x2", J15: "2x0", J16: "3x1" },
-        { Apostador: "Vini", J1: "2x0", J2: "3x0", J3: "1x2", J4: "2x1", J5: "2x1", J6: "2x1", J7: "2x1", J8: "1x1", J9: "2x1", J10: "1x2", J11: "2x1", J12: "2x0", J13: "3x1", J14: "1x2", J15: "2x1", J16: "2x0" }
+        { Apostador: "Frademir", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Laura", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Leandro", J1: "3 x 0", J2: "3 x 1", J3: "1 x 2", J4: "--", J5: "2 x 1", J6: "3 x 0", J7: "2 x 0", J8: "2 x 2", J9: "2 x 1", J10: "1 x 2", J11: "1 x 1", J12: "3 x 1", J13: "3 x 0", J14: "1 x 2", J15: "2 x 0", J16: "3 x 1" },
+        { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Luis Gustavo", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Marcia", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Marcia Paz", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Michelle", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Priscila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Rafael", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Ricardo Kappel", J1: "2 x 0", J2: "--", J3: "1 x 2", J4: "2 x 0", J5: "--", J6: "--", J7: "--", J8: "--", J9: "2 x 1", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Tarcila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
+        { Apostador: "Vini", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" }
     ];
 
     function switchTab(btn, tabId) {
