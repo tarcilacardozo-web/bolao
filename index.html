@@ -27,7 +27,7 @@
         
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 4px; border: 1px solid #ddd; }
         table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; min-width: 600px; }
-        .table-espelho table { min-width: 1800px; }
+        .table-espelho table { min-width: 1200px; } /* Ajustado para 8 colunas */
         th, td { padding: 12px 10px; border: 1px solid #ddd; }
         th { background-color: var(--primario); color: var(--branco); font-weight: bold; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -56,7 +56,7 @@
 
 <header>
     <h1>🏆 BOLÃO ASJUR 2026 ⚽</h1>
-    <p>Acompanhamento Prático de Palpites - Fase Mata-Mata</p>
+    <p>Acompanhamento Prático de Palpites - Oitavas de Final</p>
 </header>
 
 <nav class="nav-tabs">
@@ -85,8 +85,8 @@
     </section>
 
     <section id="espelho" class="tab-content">
-        <h2>Espelho de Palpites - 16avos de Final</h2>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os 16 jogos.</p>
+        <h2>Espelho de Palpites - Oitavas de Final</h2>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os 8 jogos.</p>
         <div class="table-responsive table-espelho">
             <table>
                 <thead>
@@ -103,12 +103,11 @@
         <h2>Enviar Meus Palpites</h2>
         <div class="form-group">
             <label for="select-apostador">Selecione seu Nome:</label>
-            <select id="select-apostador"><option value="">-- Escolha seu nome --</option></select>
+            <select id="select-apostador"><option value="">-- Escolha seu name --</option></select>
         </div>
         <div class="form-group">
             <label for="select-fase">Selecione a Fase do Mata-Mata:</label>
             <select id="select-fase" onchange="mudarFaseFormulario(this.value)">
-                <option value="16avos">16avos de Final (16 jogos)</option>
                 <option value="oitavas">Oitavas de Final (8 jogos)</option>
                 <option value="quartas">Quartas de Final (4 jogos)</option>
                 <option value="semi">Semifinal (2 jogos)</option>
@@ -139,14 +138,19 @@
         { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 14 }
     ];
 
+    // CONFRONTOS ATUALIZADOS DAS OITAVAS PARA A TABELA DO ESPELHO
     const titulosJogos = [
-        "Alemanha x Paraguai", "França x Suécia", "África do Sul x Canadá", "Holanda x Marrocos",
-        "Portugal x Croácia", "Espanha x Áustria", "EUA x Bósnia", "Bélgica x Senegal",
-        "Brasil x Japão", "Costa do Marfim x Noruega", "México x Equador", "Inglaterra x RD Congo",
-        "Argentina x Cabo Verde", "Austrália x Egito", "Suíça x Argélia", "Colômbia x Gana"
+        "Canadá x Marrocos", 
+        "França x Paraguai", 
+        "Brasil x Noruega", 
+        "México x Inglaterra", 
+        "Portugal x Espanha", 
+        "Estados Unidos x Bélgica", 
+        "Argentina ou Cabo Verde x Egito", 
+        "Suíça x Colômbia ou Gana"
     ];
 
-    // OITAVAS DEFINIDAS FIXAS E EM BRANCO PARA ESCRITA LIBERADA
+    // ESTRUTURA DO FORMULÁRIO DE ENVIOS
     const oitavasDefinidas = [
         { home: "Canadá", away: "Marrocos", livre: false },
         { home: "França", away: "Paraguai", livre: false },
@@ -158,30 +162,29 @@
         { home: "Suíça", away: "", livre: true, placeholderAway: "Colômbia ou Gana" }
     ];
 
-    // DEFINIÇÃO QUANTITATIVA DAS DEMAIS FASES ABERTAS
     const configuracaoFasesAbertas = {
         "quartas": 4,
         "semi": 2,
         "final": 1
     };
 
-    // ABAIXO COLOQUE SEU CONTEÚDO SALVO DO HISTÓRICO PARA AS LINHAS DO ESPELHO
+    // ESPELHO ZERADO PARA AS OITAVAS DE FINAL (PREENCHA AQUI CONFORME FOREM VOTANDO)
     const dadosEspelho = [
-        { Apostador: "Carlão", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Edson", J1: "4 x 1", J2: "3 x 0", J3: "1 x 2", J4: "1 x 2", J5: "1 x 0", J6: "3 x 0", J7: "2 x 0", J8: "3 x 1", J9: "2 x 0", J10: "1 x 3", J11: "2 x 0", J12: "4 x 0", J13: "5 x 0", J14: "0 x 2", J15: "3 x 1", J16: "4 x 1" },
-        { Apostador: "Frademir", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Laura", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Leandro", J1: "3 x 0", J2: "3 x 1", J3: "1 x 2", J4: "--", J5: "2 x 1", J6: "3 x 0", J7: "2 x 0", J8: "2 x 2", J9: "2 x 1", J10: "1 x 2", J11: "1 x 1", J12: "3 x 1", J13: "3 x 0", J14: "1 x 2", J15: "2 x 0", J16: "3 x 1" },
-        { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Luis Gustavo", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Marcia", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Marcia Paz", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Michelle", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Priscila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Rafael", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Ricardo Kappel", J1: "2 x 0", J2: "--", J3: "1 x 2", J4: "2 x 0", J5: "--", J6: "--", J7: "--", J8: "--", J9: "2 x 1", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Tarcila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" },
-        { Apostador: "Vini", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--", J9: "--", J10: "--", J11: "--", J12: "--", J13: "--", J14: "--", J15: "--", J16: "--" }
+        { Apostador: "Carlão", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Edson", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Frademir", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Laura", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Leandro", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Luis Gustavo", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Marcia", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Marcia Paz", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Michelle", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Priscila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Rafael", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Ricardo Kappel", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Tarcila", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Vini", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" }
     ];
 
     function switchTab(btn, tabId) {
@@ -195,17 +198,7 @@
         const container = document.getElementById('container-campos-jogos');
         container.innerHTML = "";
 
-        if (fase === "16avos") {
-            titulosJogos.forEach((jogo, index) => {
-                let times = jogo.split(" x ");
-                container.innerHTML += `
-                    <div class="match-card">
-                        <div class="team-display home">${times[0]}</div>
-                        <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
-                        <div class="team-display away">${times[1]}</div>
-                    </div>`;
-            });
-        } else if (fase === "oitavas") {
+        if (fase === "oitavas") {
             oitavasDefinidas.forEach((j, index) => {
                 let campoHome = j.home ? `<div class="team-display home">${j.home}</div>` : `<div class="team-input"><input type="text" id="form_j${index}_name_home" placeholder="${j.placeholderHome}" style="font-size:0.85rem;"></div>`;
                 let campoAway = j.away ? `<div class="team-display away">${j.away}</div>` : `<div class="team-input"><input type="text" id="form_j${index}_name_away" placeholder="${j.placeholderAway}" style="font-size:0.85rem;"></div>`;
@@ -218,7 +211,6 @@
                     </div>`;
             });
         } else {
-            // QUARTAS, SEMI E FINAL TOTALMENTE ABERTAS PARA DIGITAÇÃO
             const qtdJogos = configuracaoFasesAbertas[fase];
             for (let index = 0; index < qtdJogos; index++) {
                 container.innerHTML += `
@@ -238,14 +230,7 @@
         
         let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()} DE FINAL*\n`;
 
-        if (fase === "16avos") {
-            titulosJogos.forEach((jogo, index) => {
-                let valHome = document.getElementById(`form_j${index}_home`).value;
-                let valAway = document.getElementById(`form_j${index}_away`).value;
-                let times = jogo.split(" x ");
-                textoMsg += `⚽ ${times[0]} ${valHome || ' '} x ${valAway || ' '} ${times[1]}\n`;
-            });
-        } else if (fase === "oitavas") {
+        if (fase === "oitavas") {
             oitavasDefinidas.forEach((j, index) => {
                 let tHome = j.home || document.getElementById(`form_j${index}_name_home`).value || "(?)";
                 let tAway = j.away || document.getElementById(`form_j${index}_name_away`).value || "(?)";
@@ -273,18 +258,21 @@
             rBody.innerHTML += `<tr><td class="pos">${p.Pos}</td><td><strong>${p.Apostador}</strong></td><td>${p.Grupos} pts</td><td>${p.MataMata} pts</td><td class="destaque-col pts">${p.Grupos + p.MataMata} pts</td></tr>`;
         });
         dadosEspelho.map(d => d.Apostador).sort().forEach(nome => { selectApostador.innerHTML += `<option value="${nome}">${nome}</option>`; });
+        
         const eHeader = document.getElementById('espelho-header');
         titulosJogos.forEach((jogo, i) => {
             let times = jogo.split(' x ');
             eHeader.innerHTML += `<th title="${jogo}">J${i+1}<br><span style="font-size:0.7rem; font-weight:normal; display:block; min-width:80px;">${times[0]}<br>vs<br>${times[1]}</span></th>`;
         });
+        
         const eBody = document.getElementById('espelho-body');
         dadosEspelho.forEach(ap => {
             let linhaHtml = `<tr><td style="position: sticky; left: 0; background: #fff; font-weight: bold; border-right: 2px solid #ddd; z-index: 1; text-align: left;">👤 ${ap.Apostador}</td>`;
-            for(let i = 1; i <= 16; i++) { linhaHtml += `<td class="palpite-celula">${ap['J' + i] || '--'}</td>`; }
+            const totalJogosFase = titulosJogos.length;
+            for(let i = 1; i <= totalJogosFase; i++) { linhaHtml += `<td class="palpite-celula">${ap['J' + i] || '--'}</td>`; }
             eBody.innerHTML += linhaHtml + `</tr>`;
         });
-        mudarFaseFormulario("16avos");
+        mudarFaseFormulario("oitavas");
     }
 </script>
 </body>
