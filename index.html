@@ -27,7 +27,7 @@
         
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 4px; border: 1px solid #ddd; }
         table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; min-width: 600px; }
-        .table-espelho table { min-width: 1200px; } /* Ajustado para 8 colunas */
+        .table-espelho table { min-width: 1200px; }
         th, td { padding: 12px 10px; border: 1px solid #ddd; }
         th { background-color: var(--primario); color: var(--branco); font-weight: bold; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -67,7 +67,7 @@
 
 <div class="container">
     <section id="ranking" class="tab-content active">
-        <h2>Classificação Atualizada - Pós-Rodada</h2>
+        <h2>Classificação Atualizada - Pós-16avos de Final</h2>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -103,7 +103,7 @@
         <h2>Enviar Meus Palpites</h2>
         <div class="form-group">
             <label for="select-apostador">Selecione seu Nome:</label>
-            <select id="select-apostador"><option value="">-- Escolha seu name --</option></select>
+            <select id="select-apostador"><option value="">-- Escolha seu nome --</option></select>
         </div>
         <div class="form-group">
             <label for="select-fase">Selecione a Fase do Mata-Mata:</label>
@@ -120,25 +120,26 @@
 </div>
 
 <script>
+    // RANKING ATUALIZADO APÓS OS 16AVOS CONFORME PLANILHA ENVIADA
     const dadosRanking = [
-        { Pos: "1º", Apostador: "Rafael", Grupos: 198, MataMata: 63 },
-        { Pos: "2º", Apostador: "Leandro", Grupos: 192, MataMata: 81 },
-        { Pos: "3º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 69 },
+        { Pos: "1º", Apostador: "Leandro", Grupos: 192, MataMata: 81 },
+        { Pos: "2º", Apostador: "Rafael", Grupos: 198, MataMata: 63 },
+        { Pos: "3º", Apostador: "Frademir", Grupos: 178, MataMata: 78 },
         { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 65 },
-        { Pos: "5º", Apostador: "Frademir", Grupos: 178, MataMata: 78 },
-        { Pos: "6º", Apostador: "Michelle", Grupos: 191, MataMata: 41 },
+        { Pos: "5º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 69 },
+        { Pos: "6º", Apostador: "Edson", Grupos: 163, MataMata: 72 },
         { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 68 },
-        { Pos: "8º", Apostador: "Edson", Grupos: 163, MataMata: 72 },
+        { Pos: "8º", Apostador: "Michelle", Grupos: 191, MataMata: 41 },
         { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 72 },
         { Pos: "10º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 43 },
         { Pos: "11º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 51 },
         { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 64 },
         { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 35 },
-        { Pos: "14º", Apostador: "Priscila", Grupos: 115, MataMata: 41 },
-        { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 41 }
+        { Pos: "14º", Apostador: "Loren", Grupos: 117, MataMata: 41 },
+        { Pos: "15º", Apostador: "Priscila", Grupos: 115, MataMata: 41 }
     ];
 
-    // CONFRONTOS ATUALIZADOS DAS OITAVAS PARA A TABELA DO ESPELHO
+    // JOGOS DAS OITAVAS TOTALMENTE DEFINIDOS
     const titulosJogos = [
         "Canadá x Marrocos", 
         "França x Paraguai", 
@@ -150,31 +151,19 @@
         "Suíça x Colômbia"
     ];
 
-    // ESTRUTURA DO FORMULÁRIO DE ENVIOS
-    const oitavasDefinidas = [
-        { home: "Canadá", away: "Marrocos", livre: false },
-        { home: "França", away: "Paraguai", livre: false },
-        { home: "Brasil", away: "Noruega", livre: false },
-        { home: "México", away: "Inglaterra", livre: false },
-        { home: "Portugal", away: "Espanha", livre: false },
-        { home: "Estados Unidos", away: "Bélgica", livre: false },
-        { home: "Egito", away: "Argentina", livre: false },
-        { home: "Suiça", away: "Colômbia", livre: false }
-];
-
     const configuracaoFasesAbertas = {
         "quartas": 4,
         "semi": 2,
         "final": 1
     };
 
-    // ESPELHO ZERADO PARA AS OITAVAS DE FINAL (PREENCHA AQUI CONFORME FOREM VOTANDO)
+    // ESPELHO ZERADO PARA AS OITAVAS
     const dadosEspelho = [
         { Apostador: "Carlão", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Edson", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Frademir", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Laura", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
-        { Apostador: "Leandro", J1: "1x2", J2: "4x0", J3: "3x1", J4: "2x1", J5: "1x2", J6: "2x1", J7: "--", J8: "--" },
+        { Apostador: "Leandro", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Luis Gustavo", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Marcia", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
@@ -199,15 +188,13 @@
         container.innerHTML = "";
 
         if (fase === "oitavas") {
-            oitavasDefinidas.forEach((j, index) => {
-                let campoHome = j.home ? `<div class="team-display home">${j.home}</div>` : `<div class="team-input"><input type="text" id="form_j${index}_name_home" placeholder="${j.placeholderHome}" style="font-size:0.85rem;"></div>`;
-                let campoAway = j.away ? `<div class="team-display away">${j.away}</div>` : `<div class="team-input"><input type="text" id="form_j${index}_name_away" placeholder="${j.placeholderAway}" style="font-size:0.85rem;"></div>`;
-                
+            titulosJogos.forEach((jogo, index) => {
+                let times = jogo.split(" x ");
                 container.innerHTML += `
                     <div class="match-card">
-                        ${campoHome}
+                        <div class="team-display home">${times[0]}</div>
                         <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
-                        ${campoAway}
+                        <div class="team-display away">${times[1]}</div>
                     </div>`;
             });
         } else {
@@ -231,12 +218,11 @@
         let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()} DE FINAL*\n`;
 
         if (fase === "oitavas") {
-            oitavasDefinidas.forEach((j, index) => {
-                let tHome = j.home || document.getElementById(`form_j${index}_name_home`).value || "(?)";
-                let tAway = j.away || document.getElementById(`form_j${index}_name_away`).value || "(?)";
+            titulosJogos.forEach((jogo, index) => {
                 let valHome = document.getElementById(`form_j${index}_home`).value;
                 let valAway = document.getElementById(`form_j${index}_away`).value;
-                textoMsg += `⚽ ${tHome} ${valHome || ' '} x ${valAway || ' '} ${tAway}\n`;
+                let times = jogo.split(" x ");
+                textoMsg += `⚽ ${times[0]} ${valHome || ' '} x ${valAway || ' '} ${times[1]}\n`;
             });
         } else {
             const qtdJogos = configuracaoFasesAbertas[fase];
