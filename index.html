@@ -121,21 +121,21 @@
 
 <script>
     const dadosRanking = [
-        { Pos: "1º", Apostador: "Rafael", Grupos: 198, MataMata: 31 },
-        { Pos: "2º", Apostador: "Leandro", Grupos: 192, MataMata: 32 },
-        { Pos: "3º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 47 },
-        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 32 },
-        { Pos: "5º", Apostador: "Frademir", Grupos: 178, MataMata: 33 },
-        { Pos: "6º", Apostador: "Michelle", Grupos: 191, MataMata: 20 },
-        { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 41 },
-        { Pos: "8º", Apostador: "Edson", Grupos: 163, MataMata: 36 },
-        { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 42 },
-        { Pos: "10º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 17 },
-        { Pos: "11º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 26 },
-        { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 26 },
-        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 16 },
-        { Pos: "14º", Apostador: "Priscila", Grupos: 115, MataMata: 23 },
-        { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 14 }
+        { Pos: "1º", Apostador: "Rafael", Grupos: 198, MataMata: 63 },
+        { Pos: "2º", Apostador: "Leandro", Grupos: 192, MataMata: 81 },
+        { Pos: "3º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 69 },
+        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 65 },
+        { Pos: "5º", Apostador: "Frademir", Grupos: 178, MataMata: 78 },
+        { Pos: "6º", Apostador: "Michelle", Grupos: 191, MataMata: 41 },
+        { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 68 },
+        { Pos: "8º", Apostador: "Edson", Grupos: 163, MataMata: 72 },
+        { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 72 },
+        { Pos: "10º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 43 },
+        { Pos: "11º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 51 },
+        { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 64 },
+        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 35 },
+        { Pos: "14º", Apostador: "Priscila", Grupos: 115, MataMata: 41 },
+        { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 41 }
     ];
 
     // CONFRONTOS ATUALIZADOS DAS OITAVAS PARA A TABELA DO ESPELHO
@@ -146,8 +146,8 @@
         "México x Inglaterra", 
         "Portugal x Espanha", 
         "Estados Unidos x Bélgica", 
-        "Argentina ou Cabo Verde x Egito", 
-        "Suíça x Colômbia ou Gana"
+        "Argentina x Egito", 
+        "Suíça x Colômbia"
     ];
 
     // ESTRUTURA DO FORMULÁRIO DE ENVIOS
@@ -158,9 +158,9 @@
         { home: "México", away: "Inglaterra", livre: false },
         { home: "Portugal", away: "Espanha", livre: false },
         { home: "Estados Unidos", away: "Bélgica", livre: false },
-        { home: "", away: "Egito", livre: true, placeholderHome: "Argentina ou Cabo Verde" },
-        { home: "Suíça", away: "", livre: true, placeholderAway: "Colômbia ou Gana" }
-    ];
+        { home: "Egito", away: "Argentina", livre: false },
+        { home: "Suiça", away: "Colômbia", livre: false }
+];
 
     const configuracaoFasesAbertas = {
         "quartas": 4,
@@ -174,7 +174,7 @@
         { Apostador: "Edson", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Frademir", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Laura", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
-        { Apostador: "Leandro", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
+        { Apostador: "Leandro", J1: "1x2", J2: "4x0", J3: "3x1", J4: "2x1", J5: "1x2", J6: "2x1", J7: "--", J8: "--" },
         { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Luis Gustavo", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
         { Apostador: "Marcia", J1: "--", J2: "--", J3: "--", J4: "--", J5: "--", J6: "--", J7: "--", J8: "--" },
