@@ -1,1 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOLÃO ASJUR 2026</title>
+    <style>
+        :root {
+            --primario: #004d26;
+            --secundario: #fad02c;
+            --fundo: #f4f4f4;
+            --branco: #ffffff;
+            --texto: #333333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--fundo); color: var(--texto); line-height: 1.6; }
+        header { background-color: var(--primario); color: var(--branco); text-align: center; padding: 20px; border-bottom: 5px solid var(--secundario); }
+        header h1 { font-size: 1.8rem; margin-bottom: 5px; }
+        .nav-tabs { display: flex; background-color: #222; }
+        .tab-btn { flex: 1; padding: 15px; background: none; border: none; color: #aaa; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; text-align: center; }
+        .tab-btn:hover { color: var(--branco); background-color: #333; }
+        .tab-btn.active { color: var(--primario); background-color: var(--secundario); }
+        .container { max-width: 1200px; margin: 20px auto; padding: 10px; }
+        .tab-content { display: none; background: var(--branco); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        h2 { color: var(--primario); margin-bottom: 15px; border-left: 5px solid var(--secundario); padding-left: 10px; font-size: 1.4rem; }
+        
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 4px; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; min-width: 600px; }
+        .table-espelho table { min-width: 1200px; }
+        th, td { padding: 12px 10px; border: 1px solid #ddd; }
+        th { background-color: var(--primario); color: var(--branco); font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .pos { font-weight: bold; width: 60px; }
+        .pts { font-weight: bold; color: var(--primario); }
+        .destaque-col { background-color: #fffde7; font-weight: bold; }
+        .palpite-celula { font-size: 0.85rem; color: #555; white-space: nowrap; }
 
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: var(--primario); }
+        select, input[type="number"], input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        .match-card { display: flex; align-items: center; justify-content: space-between; background: #f9f9f9; padding: 12px; margin-bottom: 10px; border-radius: 6px; border-left: 4px solid var(--primario); gap: 10px; }
+        .team-display { flex: 2; font-weight: bold; }
+        .team-display.home { text-align: right; }
+        .team-display.away { text-align: left; }
+        .team-input { flex: 2; }
+        .team-input input { text-align: center; font-weight: bold; background: #fff; }
+        .score-inputs { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
+        .score-inputs input { width: 45px; text-align: center; padding: 5px; font-size: 1.1rem; font-weight: bold; }
+        .btn-enviar { width: 100%; padding: 15px; background-color: #25d366; color: white; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-enviar:hover { background-color: #128c7e; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏆 BOLÃO ASJUR 2026 ⚽</h1>
+    <p>Acompanhamento Prático de Palpites - Oitavas de Final</p>
+</header>
+
+<nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab(this, 'ranking')">📊 Classificação</button>
+    <button class="tab-btn" onclick="switchTab(this, 'espelho')">🔥 Espelho Geral</button>
+    <button class="tab-btn" onclick="switchTab(this, 'palpitar')">✍️ Palpitar</button>
+</nav>
+
+<div class="container">
+    <section id="ranking" class="tab-content active">
+        <h2>Classificação Atualizada - Pós-16avos de Final</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="pos">Pos.</th>
+                        <th>Apostador</th>
+                        <th>Fase de Grupos</th>
+                        <th>Fase Mata-Mata</th>
+                        <th class="destaque-col">Total Geral</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="espelho" class="tab-content">
+        <h2>Espelho de Palpites - Oitavas de Final</h2>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os 8 jogos.</p>
+        <div class="table-responsive table-espelho">
+            <table>
+                <thead>
+                    <tr id="espelho-header">
+                        <th style="position: sticky; left: 0; background: var(--primario); z-index: 2; min-width: 150px;">Apostador</th>
+                    </tr>
+                </thead>
+                <tbody id="espelho-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="palpitar" class="tab-content">
+        <h2>Enviar Meus Palpites</h2>
+        <div class="form-group">
+            <label for="select-apostador">Selecione seu Nome:</label>
+            <select id="select-apostador"><option value="">-- Escolha seu nome --</option></select>
+        </div>
+        <div class="form-group">
+            <label for="select-fase">Selecione a Fase do Mata-Mata:</label>
+            <select id="select-fase" onchange="mudarFaseFormulario(this.value)">
+                <option value="oitavas">Oitavas de Final (8 jogos)</option>
+                <option value="quartas">Quartas de Final (4 jogos)</option>
+                <option value="semi">Semifinal (2 jogos)</option>
+                <option value="final">Grande Final (1 jogo)</option>
+            </select>
+        </div>
+        <div id="container-campos-jogos"></div>
+        <button class="btn-enviar" onclick="enviarPalpitesWhatsApp()">📱 Enviar Palpites via WhatsApp</button>
+    </section>
+</div>
+
+<script>
+    // RANKING ATUALIZADO APÓS OS 16AVOS CONFORME PLANILHA ENVIADA
+    const dadosRanking = [
+        { Pos: "1º", Apostador: "Leandro", Grupos: 192, MataMata: 81 },
+        { Pos: "2º", Apostador: "Rafael", Grupos: 198, MataMata: 63 },
+        { Pos: "3º", Apostador: "Frademir", Grupos: 178, MataMata: 78 },
+        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 65 },
+        { Pos: "5º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 69 },
+        { Pos: "6º", Apostador: "Edson", Grupos: 163, MataMata: 72 },
+        { Pos: "7º", Apostador: "Renata", Grupos: 166, MataMata: 68 },
+        { Pos: "8º", Apostador: "Michelle", Grupos: 191, MataMata: 41 },
+        { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 72 },
+        { Pos: "10º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 43 },
+        { Pos: "11º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 51 },
+        { Pos: "12º", Apostador: "Tarcila", Grupos: 138, MataMata: 64 },
+        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 35 },
+        { Pos: "14º", Apostador: "Loren", Grupos: 117, MataMata: 41 },
+        { Pos: "15º", Apostador: "Priscila", Grupos: 115, MataMata: 41 }
+    ];
+
+    // JOGOS DAS OITAVAS TOTALMENTE DEFINIDOS
+    const titulosJogos = [
+        "Canadá x Marrocos", 
+        "França x Paraguai", 
+        "Brasil x Noruega", 
+        "México x Inglaterra", 
+        "Portugal x Espanha", 
+        "Estados Unidos x Bélgica", 
+        "Argentina x Egito", 
+        "Suíça x Colômbia"
+    ];
+
+    const configuracaoFasesAbertas = {
+        "quartas": 4,
+        "semi": 2,
+        "final": 1
+    };
+
+    // ESPELHO ZERADO PARA AS OITAVAS
+    const dadosEspelho = [
+        { Apostador: "Carlão", J1: "--", J2: "3x1", J3: "2x1", J4: "2x2", J5: "1x2", J6: "2x2", J7: "2x1", J8: "1x2" },
+        { Apostador: "Edson", J1: "0x2", J2: "3x1", J3: "2x2", J4: "2x1", J5: "2x2", J6: "1x1", J7: "3x0", J8: "0x3" },
+        { Apostador: "Frademir", J1: "1x2", J2: "2x0", J3: "2x1", J4: "2x1", J5: "2x3", J6: "1x1", J7: "3x1", J8: "1x2" },
+        { Apostador: "Laura", J1: "1x2", J2: "3x0", J3: "2x1", J4: "1x2", J5: "1x2", J6: "3x1", J7: "3x1", J8: "0x1" },
+        { Apostador: "Leandro", J1: "1x2", J2: "4x0", J3: "3x1", J4: "2x1", J5: "1x2", J6: "2x1", J7: "2x0", J8: "1x2" },
+        { Apostador: "Loren", J1: "1x2", J2: "4x0", J3: "3x1", J4: "2x1", J5: "1x2", J6: "2x1", J7: "2x0", J8: "1x2" },
+        { Apostador: "Luis Gustavo", J1: "1x2", J2: "3x1", J3: "2x1", J4: "2x1", J5: "2x2", J6: "2x2", J7: "3x1", J8: "1x2" },
+        { Apostador: "Renata", J1: "1x2", J2: "3x1", J3: "2x1", J4: "1x2", J5: "1x2", J6: "2x1", J7: "2x0", J8: "1x2" },
+        { Apostador: "Marcia Paz", J1: "1x2", J2: "3x0", J3: "2x1", J4: "2x1", J5: "2x1", J6: "1x2", J7: "3x0", J8: "1x1" },
+        { Apostador: "Michelle", J1: "1x2", J2: "2x0", J3: "2x0", J4: "1x2", J5: "1x2", J6: "1x2", J7: "3x1", J8: "1x1" },
+        { Apostador: "Priscila", J1: "1x2", J2: "3x1", J3: "2x1", J4: "1x2", J5: "3x1", J6: "1x2", J7: "3x1", J8: "1x2" },
+        { Apostador: "Rafael", J1: "1x2", J2: "3x0", J3: "2x1", J4: "1x2", J5: "2x1", J6: "1x2", J7: "2x1", J8: "0x1" },
+        { Apostador: "Ricardo Kappel", J1: "1x2", J2: "3x1", J3: "2x1", J4: "1x2", J5: "2x1", J6: "2x1", J7: "2x1", J8: "0x1" },
+        { Apostador: "Tarcila", J1: "0x2", J2: "3x0", J3: "3x2", J4: "2x1", J5: "2x3", J6: "2x0", J7: "2x1", J8: "1x2" },
+        { Apostador: "Vini", J1: "0x1", J2: "2x0", J3: "2x1", J4: "1x2", J5: "1x2", J6: "1x1", J7: "2x1", J8: "0x1" }
+    ];
+
+    function switchTab(btn, tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    function mudarFaseFormulario(fase) {
+        const container = document.getElementById('container-campos-jogos');
+        container.innerHTML = "";
+
+        if (fase === "oitavas") {
+            titulosJogos.forEach((jogo, index) => {
+                let times = jogo.split(" x ");
+                container.innerHTML += `
+                    <div class="match-card">
+                        <div class="team-display home">${times[0]}</div>
+                        <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
+                        <div class="team-display away">${times[1]}</div>
+                    </div>`;
+            });
+        } else {
+            const qtdJogos = configuracaoFasesAbertas[fase];
+            for (let index = 0; index < qtdJogos; index++) {
+                container.innerHTML += `
+                    <div class="match-card">
+                        <div class="team-input"><input type="text" id="form_j${index}_name_home" placeholder="Seleção A"></div>
+                        <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
+                        <div class="team-input"><input type="text" id="form_j${index}_name_away" placeholder="Seleção B"></div>
+                    </div>`;
+            }
+        }
+    }
+
+    function enviarPalpitesWhatsApp() {
+        const apostador = document.getElementById('select-apostador').value;
+        const fase = document.getElementById('select-fase').value;
+        if (!apostador) { alert("Por favor, selecione seu nome!"); return; }
+        
+        let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()} DE FINAL*\n`;
+
+        if (fase === "oitavas") {
+            titulosJogos.forEach((jogo, index) => {
+                let valHome = document.getElementById(`form_j${index}_home`).value;
+                let valAway = document.getElementById(`form_j${index}_away`).value;
+                let times = jogo.split(" x ");
+                textoMsg += `⚽ ${times[0]} ${valHome || ' '} x ${valAway || ' '} ${times[1]}\n`;
+            });
+        } else {
+            const qtdJogos = configuracaoFasesAbertas[fase];
+            for (let index = 0; index < qtdJogos; index++) {
+                let tHome = document.getElementById(`form_j${index}_name_home`).value || "Seleção A";
+                let tAway = document.getElementById(`form_j${index}_name_away`).value || "Seleção B";
+                let valHome = document.getElementById(`form_j${index}_home`).value;
+                let valAway = document.getElementById(`form_j${index}_away`).value;
+                textoMsg += `⚽ ${tHome} ${valHome || ' '} x ${valAway || ' '} ${tAway}\n`;
+            }
+        }
+        window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(textoMsg), '_blank');
+    }
+
+    window.onload = function() {
+        const rBody = document.getElementById('ranking-body');
+        const selectApostador = document.getElementById('select-apostador');
+        dadosRanking.forEach(p => {
+            rBody.innerHTML += `<tr><td class="pos">${p.Pos}</td><td><strong>${p.Apostador}</strong></td><td>${p.Grupos} pts</td><td>${p.MataMata} pts</td><td class="destaque-col pts">${p.Grupos + p.MataMata} pts</td></tr>`;
+        });
+        dadosEspelho.map(d => d.Apostador).sort().forEach(nome => { selectApostador.innerHTML += `<option value="${nome}">${nome}</option>`; });
+        
+        const eHeader = document.getElementById('espelho-header');
+        titulosJogos.forEach((jogo, i) => {
+            let times = jogo.split(' x ');
+            eHeader.innerHTML += `<th title="${jogo}">J${i+1}<br><span style="font-size:0.7rem; font-weight:normal; display:block; min-width:80px;">${times[0]}<br>vs<br>${times[1]}</span></th>`;
+        });
+        
+        const eBody = document.getElementById('espelho-body');
+        dadosEspelho.forEach(ap => {
+            let linhaHtml = `<tr><td style="position: sticky; left: 0; background: #fff; font-weight: bold; border-right: 2px solid #ddd; z-index: 1; text-align: left;">👤 ${ap.Apostador}</td>`;
+            const totalJogosFase = titulosJogos.length;
+            for(let i = 1; i <= totalJogosFase; i++) { linhaHtml += `<td class="palpite-celula">${ap['J' + i] || '--'}</td>`; }
+            eBody.innerHTML += linhaHtml + `</tr>`;
+        });
+        mudarFaseFormulario("oitavas");
+    }
+</script>
+</body>
+</html>
