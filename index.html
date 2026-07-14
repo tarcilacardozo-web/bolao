@@ -27,7 +27,7 @@
         
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 4px; border: 1px solid #ddd; }
         table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; min-width: 600px; }
-        .table-espelho table { min-width: 800px; }
+        .table-espelho table { min-width: 600px; }
         th, td { padding: 12px 10px; border: 1px solid #ddd; }
         th { background-color: var(--primario); color: var(--branco); font-weight: bold; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -56,7 +56,7 @@
 
 <header>
     <h1>🏆 BOLÃO ASJUR 2026 ⚽</h1>
-    <p>Acompanhamento Prático de Palpites - Quartas de Final</p>
+    <p>Acompanhamento Prático de Palpites - Semifinal</p>
 </header>
 
 <nav class="nav-tabs">
@@ -67,7 +67,7 @@
 
 <div class="container">
     <section id="ranking" class="tab-content active">
-        <h2>Classificação Atualizada - Pós-Oitavas</h2>
+        <h2>Classificação Oficial - Pós-Quartas de Final</h2>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -85,8 +85,8 @@
     </section>
 
     <section id="espelho" class="tab-content">
-        <h2>Espelho de Palpites - Quartas de Final</h2>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os 4 jogos.</p>
+        <h2>Espelho de Palpites - Semifinal</h2>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os palpites.</p>
         <div class="table-responsive table-espelho">
             <table>
                 <thead>
@@ -108,7 +108,6 @@
         <div class="form-group">
             <label for="select-fase">Selecione a Fase do Mata-Mata:</label>
             <select id="select-fase" onchange="mudarFaseFormulario(this.value)">
-                <option value="quartas">Quartas de Final (4 jogos)</option>
                 <option value="semi">Semifinal (2 jogos)</option>
                 <option value="final">Grande Final (1 jogo)</option>
             </select>
@@ -119,55 +118,52 @@
 </div>
 
 <script>
-    // RANKING ATUALIZADO (Soma acumulada da coluna B com a C)
+    // 1. ATUALIZE OS VALORES DO RANKING SEGUNDO SUA NOVA PLANILHA DAS QUARTAS DE FINAL
     const dadosRanking = [
-        { Pos: "1º", Apostador: "Leandro", Grupos: 192, MataMata: 95 },
-        { Pos: "2º", Apostador: "Rafael", Grupos: 198, MataMata: 82 },
-        { Pos: "3º", Apostador: "Frademir", Grupos: 178, MataMata: 94 },
-        { Pos: "4º", Apostador: "Carlão", Grupos: 184, MataMata: 72 },
-        { Pos: "5º", Apostador: "Michelle", Grupos: 191, MataMata: 65 },
-        { Pos: "6º", Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 83 },
-        { Pos: "7º", Apostador: "Edson", Grupos: 163, MataMata: 87 },
-        { Pos: "8º", Apostador: "Renata", Grupos: 166, MataMata: 79 },
-        { Pos: "9º", Apostador: "Vini", Grupos: 141, MataMata: 91 },
-        { Pos: "10º", Apostador: "Tarcila", Grupos: 138, MataMata: 89 },
-        { Pos: "11º", Apostador: "Marcia Paz", Grupos: 162, MataMata: 63 },
-        { Pos: "12º", Apostador: "Luis Gustavo", Grupos: 152, MataMata: 66 },
-        { Pos: "13º", Apostador: "Laura", Grupos: 134, MataMata: 53 },
-        { Pos: "14º", Apostador: "Priscila", Grupos: 115, MataMata: 61 },
-        { Pos: "15º", Apostador: "Loren", Grupos: 117, MataMata: 55 }
+        { Apostador: "Leandro", Grupos: 192, MataMata: 95 },       // Coloque o novo acumulado de mata-mata aqui
+        { Apostador: "Rafael", Grupos: 198, MataMata: 82 },
+        { Apostador: "Frademir", Grupos: 178, MataMata: 94 },
+        { Apostador: "Carlão", Grupos: 184, MataMata: 72 },
+        { Apostador: "Michelle", Grupos: 191, MataMata: 65 },
+        { Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 83 },
+        { Apostador: "Edson", Grupos: 163, MataMata: 87 },
+        { Apostador: "Renata", Grupos: 166, MataMata: 79 },
+        { Apostador: "Vini", Grupos: 141, MataMata: 91 },
+        { Apostador: "Tarcila", Grupos: 138, MataMata: 89 },       //
+        { Apostador: "Marcia Paz", Grupos: 162, MataMata: 63 },
+        { Apostador: "Luis Gustavo", Grupos: 152, MataMata: 66 },
+        { Apostador: "Laura", Grupos: 134, MataMata: 53 },
+        { Apostador: "Priscila", Grupos: 115, MataMata: 61 },
+        { Apostador: "Loren", Grupos: 117, MataMata: 55 }
     ];
 
-    // CONFRONTOS DEFINIDOS DAS QUARTAS DE FINAL
+    // 2. ESCREVA AQUI OS DOIS CONFRONTOS CONFIRMADOS DA SEMIFINAL
     const titulosJogos = [
-        "França x Marrocos", 
-        "Espanha x Bélgica", 
-        "Noruega x Inglaterra", 
-        "Argentina x Suíça"
+        "França x Espanha", 
+        "Argentina xInglaterra"
     ];
 
     const configuracaoFasesAbertas = {
-        "semi": 2,
         "final": 1
     };
 
-    // ESPELHO ZERADO PARA AS QUARTAS DE FINAL
+    // ESPELHO DE PALPITES ZERADO PARA A SEMIFINAL (PREENCHA DE J1 A J2)
     const dadosEspelho = [
-        { Apostador: "Carlão", J1: "3x1", J2: "1x2", J3: "2x1", J4: "0x1" },
-        { Apostador: "Edson", J1: "1x0", J2: "2x0", J3: "1x1", J4: "3x1" },
-        { Apostador: "Frademir", J1: "2x0", J2: "1x0", J3: "1x1", J4: "1x0" },
-        { Apostador: "Laura", J1: "1x0", J2: "1x0", J3: "2x1", J4: "1x0" },
-        { Apostador: "Leandro", J1: "2x0", J2: "2x1", J3: "1x2", J4: "2x0" },
-        { Apostador: "Loren", J1: "2x1", J2: "1x0", J3: "1x2", J4: "2x0" },
-        { Apostador: "Luis Gustavo", J1: "3x1", J2: "2x0", J3: "0x1", J4: "3x1" },
-        { Apostador: "Renata", J1: "3x1", J2: "1x1", J3: "1x2", J4: "2x1" },
-        { Apostador: "Marcia Paz", J1: "2x0", J2: "2x1", J3: "1x3", J4: "2x3" },
-        { Apostador: "Michelle", J1: "2x1", J2: "2x0", J3: "1x1", J4: "2x0" },
-        { Apostador: "Priscila", J1: "1x0", J2: "2x1", J3: "2x1", J4: "3x2" },
-        { Apostador: "Rafael", J1: "2x0", J2: "1x0", J3: "0x1", J4: "1x0" },
-        { Apostador: "Ricardo Kappel", J1: "2x1", J2: "1x0", J3: "2x1", J4: "2x0" },
-        { Apostador: "Tarcila", J1: "3x1", J2: "2x0", J3: "2x1", J4: "2x0" },
-        { Apostador: "Vini", J1: "1x0", J2: "2x1", J3: "1x2", J4: "2x1" }
+        { Apostador: "Carlão", J1: "2x1", J2: "1x2" },
+        { Apostador: "Edson", J1: "1x2", J2: "3x2" },
+        { Apostador: "Frademir", J1: "1x1", J2: "1x1" },
+        { Apostador: "Laura", J1: "3x2", J2: "2x1" },
+        { Apostador: "Leandro", J1: "3x2", J2: "1x2" },
+        { Apostador: "Loren", J1: "--", J2: "--" },
+        { Apostador: "Luis Gustavo", J1: "2x1", J2: "2x1" },
+        { Apostador: "Renata", J1: "2x1", J2: "1x1" },
+        { Apostador: "Marcia Paz", J1: "3x1", J2: "2x1" },
+        { Apostador: "Michelle", J1: "2x3", J2: "2x3" },
+        { Apostador: "Priscila", J1: "2x1", J2: "2x0" },
+        { Apostador: "Rafael", J1: "2x1", J2: "2x1" },
+        { Apostador: "Ricardo Kappel", J1: "2x0", J2: "2x1" },
+        { Apostador: "Tarcila", J1: "1x2", J2: "1x1" },               //
+        { Apostador: "Vini", J1: "2x1", J2: "1x1" }
     ];
 
     function switchTab(btn, tabId) {
@@ -181,7 +177,7 @@
         const container = document.getElementById('container-campos-jogos');
         container.innerHTML = "";
 
-        if (fase === "quartas") {
+        if (fase === "semi") {
             titulosJogos.forEach((jogo, index) => {
                 let times = jogo.split(" x ");
                 container.innerHTML += `
@@ -209,9 +205,9 @@
         const fase = document.getElementById('select-fase').value;
         if (!apostador) { alert("Por favor, selecione seu nome!"); return; }
         
-        let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()} DE FINAL*\n`;
+        let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()}*\n`;
 
-        if (fase === "quartas") {
+        if (fase === "semi") {
             titulosJogos.forEach((jogo, index) => {
                 let valHome = document.getElementById(`form_j${index}_home`).value;
                 let valAway = document.getElementById(`form_j${index}_away`).value;
@@ -235,7 +231,7 @@
         const rBody = document.getElementById('ranking-body');
         const selectApostador = document.getElementById('select-apostador');
         
-        // Garante que o ranking exiba ordenado de acordo com a soma total mais recente
+        // Garante ordenação perfeita baseada no total geral
         dadosRanking.sort((a, b) => (b.Grupos + b.MataMata) - (a.Grupos + a.MataMata));
         
         dadosRanking.forEach((p, index) => {
@@ -258,7 +254,7 @@
             for(let i = 1; i <= totalJogosFase; i++) { linhaHtml += `<td class="palpite-celula">${ap['J' + i] || '--'}</td>`; }
             eBody.innerHTML += linhaHtml + `</tr>`;
         });
-        mudarFaseFormulario("quartas");
+        mudarFaseFormulario("semi");
     }
 </script>
 </body>
