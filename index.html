@@ -27,7 +27,7 @@
         
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border-radius: 4px; border: 1px solid #ddd; }
         table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; min-width: 600px; }
-        .table-espelho table { min-width: 600px; }
+        .table-espelho table { min-width: 850px; }
         th, td { padding: 12px 10px; border: 1px solid #ddd; }
         th { background-color: var(--primario); color: var(--branco); font-weight: bold; }
         tr:nth-child(even) { background-color: #f9f9f9; }
@@ -56,7 +56,7 @@
 
 <header>
     <h1>🏆 BOLÃO ASJUR 2026 ⚽</h1>
-    <p>Acompanhamento Prático de Palpites - Semifinal</p>
+    <p>Acompanhamento de Palpites - Fases Finais Completas</p>
 </header>
 
 <nav class="nav-tabs">
@@ -67,7 +67,7 @@
 
 <div class="container">
     <section id="ranking" class="tab-content active">
-        <h2>Classificação Oficial - Pós-Quartas de Final</h2>
+        <h2>Classificação Oficial - Atualizada</h2>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -85,8 +85,7 @@
     </section>
 
     <section id="espelho" class="tab-content">
-        <h2>Espelho de Palpites - Semifinal</h2>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">💡 Desloque a tabela para os lados para ver todos os palpites.</p>
+        <h2>Espelho de Palpites - Semifinais, 3º Lugar e Final</h2>
         <div class="table-responsive table-espelho">
             <table>
                 <thead>
@@ -106,10 +105,9 @@
             <select id="select-apostador"><option value="">-- Escolha seu nome --</option></select>
         </div>
         <div class="form-group">
-            <label for="select-fase">Selecione a Fase do Mata-Mata:</label>
+            <label for="select-fase">Selecione a Fase:</label>
             <select id="select-fase" onchange="mudarFaseFormulario(this.value)">
-                <option value="semi">Semifinal (2 jogos)</option>
-                <option value="final">Grande Final (1 jogo)</option>
+                <option value="finais">Fases Finais / Próximos Jogos</option>
             </select>
         </div>
         <div id="container-campos-jogos"></div>
@@ -118,52 +116,49 @@
 </div>
 
 <script>
-    // 1. ATUALIZE OS VALORES DO RANKING SEGUNDO SUA NOVA PLANILHA DAS QUARTAS DE FINAL
+    // DADOS DO RANKING (Baseados na coluna Total da planilha)
     const dadosRanking = [
-        { Apostador: "Leandro", Grupos: 192, MataMata: 95 },       // Coloque o novo acumulado de mata-mata aqui
-        { Apostador: "Rafael", Grupos: 198, MataMata: 82 },
-        { Apostador: "Frademir", Grupos: 178, MataMata: 94 },
-        { Apostador: "Carlão", Grupos: 184, MataMata: 72 },
-        { Apostador: "Michelle", Grupos: 191, MataMata: 65 },
-        { Apostador: "Ricardo Kappel", Grupos: 172, MataMata: 83 },
-        { Apostador: "Edson", Grupos: 163, MataMata: 87 },
-        { Apostador: "Renata", Grupos: 166, MataMata: 79 },
-        { Apostador: "Vini", Grupos: 141, MataMata: 91 },
-        { Apostador: "Tarcila", Grupos: 138, MataMata: 89 },       //
-        { Apostador: "Marcia Paz", Grupos: 162, MataMata: 63 },
-        { Apostador: "Luis Gustavo", Grupos: 152, MataMata: 66 },
-        { Apostador: "Laura", Grupos: 134, MataMata: 53 },
-        { Apostador: "Priscila", Grupos: 115, MataMata: 61 },
-        { Apostador: "Loren", Grupos: 117, MataMata: 55 }
+        { Apostador: "Leandro", Grupos: 192, Total: 321 },
+        { Apostador: "Rafael", Grupos: 198, Total: 309 },
+        { Apostador: "Frademir", Grupos: 178, Total: 290 },
+        { Apostador: "Edson", Grupos: 163, Total: 276 },
+        { Apostador: "Ricardo Kappel", Grupos: 172, Total: 275 },
+        { Apostador: "Michelle", Grupos: 191, Total: 275 },
+        { Apostador: "Renata", Grupos: 166, Total: 264 },
+        { Apostador: "Vini", Grupos: 141, Total: 261 },
+        { Apostador: "Carlão", Grupos: 184, Total: 259 },
+        { Apostador: "Marcia Paz", Grupos: 162, Total: 259 },
+        { Apostador: "Luis Gustavo", Grupos: 152, Total: 248 },
+        { Apostador: "Tarcila", Grupos: 138, Total: 242 },
+        { Apostador: "Laura", Grupos: 134, Total: 208 },
+        { Apostador: "Priscila", Grupos: 115, Total: 198 },
+        { Apostador: "Loren", Grupos: 117, Total: 192 }
     ];
 
-    // 2. ESCREVA AQUI OS DOIS CONFRONTOS CONFIRMADOS DA SEMIFINAL
+    // DEFINIÇÃO COMPLETA DOS 4 JOGOS DO MATA-MATA FINAL
     const titulosJogos = [
-        "França x Espanha", 
-        "Argentina xInglaterra"
+        "França x Espanha (Semi 1)", 
+        "Argentina x Inglaterra (Semi 2)", 
+        "França x Inglaterra (3º Lugar)",
+        "Argentina x Espanha (Grande Final)"
     ];
 
-    const configuracaoFasesAbertas = {
-        "final": 1
-    };
-
-    // ESPELHO DE PALPITES ZERADO PARA A SEMIFINAL (PREENCHA DE J1 A J2)
+    // ESPELHO ALINHADO COM AS COLUNAS DA SUA PLANILHA (J3 = Coluna I: França x Inglaterra)
     const dadosEspelho = [
-        { Apostador: "Carlão", J1: "2x1", J2: "1x2" },
-        { Apostador: "Edson", J1: "1x2", J2: "3x2" },
-        { Apostador: "Frademir", J1: "1x1", J2: "1x1" },
-        { Apostador: "Laura", J1: "3x2", J2: "2x1" },
-        { Apostador: "Leandro", J1: "3x2", J2: "1x2" },
-        { Apostador: "Loren", J1: "--", J2: "--" },
-        { Apostador: "Luis Gustavo", J1: "2x1", J2: "2x1" },
-        { Apostador: "Renata", J1: "2x1", J2: "1x1" },
-        { Apostador: "Marcia Paz", J1: "3x1", J2: "2x1" },
-        { Apostador: "Michelle", J1: "2x3", J2: "2x3" },
-        { Apostador: "Priscila", J1: "2x1", J2: "2x0" },
-        { Apostador: "Rafael", J1: "2x1", J2: "2x1" },
-        { Apostador: "Ricardo Kappel", J1: "2x0", J2: "2x1" },
-        { Apostador: "Tarcila", J1: "1x2", J2: "1x1" },               //
-        { Apostador: "Vini", J1: "2x1", J2: "1x1" }
+        { Apostador: "Carlão", J1: "2x1", J2: "1x2", J3: "2x1", J4: "0x2" },
+        { Apostador: "Edson", J1: "1x2", J2: "3x2", J3: "2x0", J4: "1x2" },
+        { Apostador: "Frademir", J1: "1x1", J2: "1x1", J3: "2x1", J4: "1x1" },
+        { Apostador: "Laura", J1: "3x2", J2: "2x1", J3: "2x1", J4: "3x2" },
+        { Apostador: "Leandro", J1: "3x2", J2: "1x2", J3: "2x1", J4: "3x2" },
+        { Apostador: "Loren", J1: "--", J2: "--", J3: "--", J4: "--" },
+        { Apostador: "Luis Gustavo", J1: "2x1", J2: "2x1", J3: "3x1", J4: "2x1" },
+        { Apostador: "Marcia Paz", J1: "3x1", J2: "2x1", J3: "2x1", J4: "3x1" },
+        { Apostador: "Michelle", J1: "2x3", J2: "2x3", J3: "2x1", J4: "2x3" },
+        { Apostador: "Priscila", J1: "2x1", J2: "2x0", J3: "1x0", J4: "2x1" },
+        { Apostador: "Rafael", J1: "2x1", J2: "2x1", J3: "2x1", J4: "2x1" },
+        { Apostador: "Ricardo Kappel", J1: "2x0", J2: "2x1", J3: "2x0", J4: "2x0" },
+        { Apostador: "Tarcila", J1: "1x2", J2: "1x1", J3: "2x1", J4: "1x2" },
+        { Apostador: "Vini", J1: "2x1", J2: "1x1", J3: "2x1", J4: "2x1" }
     ];
 
     function switchTab(btn, tabId) {
@@ -177,53 +172,30 @@
         const container = document.getElementById('container-campos-jogos');
         container.innerHTML = "";
 
-        if (fase === "semi") {
-            titulosJogos.forEach((jogo, index) => {
-                let times = jogo.split(" x ");
-                container.innerHTML += `
-                    <div class="match-card">
-                        <div class="team-display home">${times[0]}</div>
-                        <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
-                        <div class="team-display away">${times[1]}</div>
-                    </div>`;
-            });
-        } else {
-            const qtdJogos = configuracaoFasesAbertas[fase];
-            for (let index = 0; index < qtdJogos; index++) {
-                container.innerHTML += `
-                    <div class="match-card">
-                        <div class="team-input"><input type="text" id="form_j${index}_name_home" placeholder="Seleção A"></div>
-                        <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
-                        <div class="team-input"><input type="text" id="form_j${index}_name_away" placeholder="Seleção B"></div>
-                    </div>`;
-            }
-        }
+        titulosJogos.forEach((jogo, index) => {
+            let times = jogo.split(" x ");
+            container.innerHTML += `
+                <div class="match-card">
+                    <div class="team-display home">${times[0]}</div>
+                    <div class="score-inputs"><input type="number" min="0" id="form_j${index}_home" placeholder="0"><span>X</span><input type="number" min="0" id="form_j${index}_away" placeholder="0"></div>
+                    <div class="team-display away">${times[1]}</div>
+                </div>`;
+        });
     }
 
     function enviarPalpitesWhatsApp() {
         const apostador = document.getElementById('select-apostador').value;
-        const fase = document.getElementById('select-fase').value;
         if (!apostador) { alert("Por favor, selecione seu nome!"); return; }
         
-        let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*${fase.toUpperCase()}*\n`;
+        let textoMsg = `*PALPITES DO BOLÃO ASJUR*\n*Apostador:* ${apostador}\n\n*RODADA ATUAL*\n`;
 
-        if (fase === "semi") {
-            titulosJogos.forEach((jogo, index) => {
-                let valHome = document.getElementById(`form_j${index}_home`).value;
-                let valAway = document.getElementById(`form_j${index}_away`).value;
-                let times = jogo.split(" x ");
-                textoMsg += `⚽ ${times[0]} ${valHome || ' '} x ${valAway || ' '} ${times[1]}\n`;
-            });
-        } else {
-            const qtdJogos = configuracaoFasesAbertas[fase];
-            for (let index = 0; index < qtdJogos; index++) {
-                let tHome = document.getElementById(`form_j${index}_name_home`).value || "Seleção A";
-                let tAway = document.getElementById(`form_j${index}_name_away`).value || "Seleção B";
-                let valHome = document.getElementById(`form_j${index}_home`).value;
-                let valAway = document.getElementById(`form_j${index}_away`).value;
-                textoMsg += `⚽ ${tHome} ${valHome || ' '} x ${valAway || ' '} ${tAway}\n`;
-            }
-        }
+        titulosJogos.forEach((jogo, index) => {
+            let valHome = document.getElementById(`form_j${index}_home`).value;
+            let valAway = document.getElementById(`form_j./${index}_away`).value;
+            let times = jogo.split(" x ");
+            textoMsg += `⚽ ${times[0]} ${valHome || ' '} x ${valAway || ' '} ${times[1]}\n`;
+        });
+        
         window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(textoMsg), '_blank');
     }
 
@@ -231,12 +203,12 @@
         const rBody = document.getElementById('ranking-body');
         const selectApostador = document.getElementById('select-apostador');
         
-        // Garante ordenação perfeita baseada no total geral
-        dadosRanking.sort((a, b) => (b.Grupos + b.MataMata) - (a.Grupos + a.MataMata));
+        // Ordenação por Total de Pontos
+        dadosRanking.sort((a, b) => b.Total - a.Total);
         
         dadosRanking.forEach((p, index) => {
-            let totalGeral = p.Grupos + p.MataMata;
-            rBody.innerHTML += `<tr><td class="pos">${index + 1}º</td><td><strong>${p.Apostador}</strong></td><td>${p.Grupos} pts</td><td>${p.MataMata} pts</td><td class="destaque-col pts">${totalGeral} pts</td></tr>`;
+            let ptsMataMata = p.Total - p.Grupos;
+            rBody.innerHTML += `<tr><td class="pos">${index + 1}º</td><td><strong>${p.Apostador}</strong></td><td>${p.Grupos} pts</td><td>${ptsMataMata} pts</td><td class="destaque-col pts">${p.Total} pts</td></tr>`;
         });
         
         dadosEspelho.map(d => d.Apostador).sort().forEach(nome => { selectApostador.innerHTML += `<option value="${nome}">${nome}</option>`; });
@@ -244,7 +216,7 @@
         const eHeader = document.getElementById('espelho-header');
         titulosJogos.forEach((jogo, i) => {
             let times = jogo.split(' x ');
-            eHeader.innerHTML += `<th title="${jogo}">J${i+1}<br><span style="font-size:0.7rem; font-weight:normal; display:block; min-width:80px;">${times[0]}<br>vs<br>${times[1]}</span></th>`;
+            eHeader.innerHTML += `<th title="${jogo}">J${i+1}<br><span style="font-size:0.7rem; font-weight:normal; display:block; min-width:90px;">${times[0]}<br>vs<br>${times[1]}</span></th>`;
         });
         
         const eBody = document.getElementById('espelho-body');
@@ -254,8 +226,9 @@
             for(let i = 1; i <= totalJogosFase; i++) { linhaHtml += `<td class="palpite-celula">${ap['J' + i] || '--'}</td>`; }
             eBody.innerHTML += linhaHtml + `</tr>`;
         });
-        mudarFaseFormulario("semi");
+        mudarFaseFormulario("finais");
     }
 </script>
 </body>
-</html>
+        </html>
+        
